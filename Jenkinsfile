@@ -1,23 +1,15 @@
 pipeline {
-    
     agent any
-    
-    parameters {
-        booleanParam(name: "RELEASE", defaultValue: false)
-    }
-    
-    stages {
 
-        stage("Build") {
-            steps {
-                sh "./gradlew build"
+    stages {
+        stage('Deploy') {
+            when {
+              expression {
+                currentBuild.result == null || currentBuild.result == 'SUCCESS' 
+              }
             }
-        }
-        
-        stage("Publish") {
-            when { expression { params.RELEASE } }
             steps {
-                sh "./gradlew release"
+                sh 'make publish'
             }
         }
     }
