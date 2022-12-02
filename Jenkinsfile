@@ -1,22 +1,24 @@
 pipeline {
+    
     agent any
+    
+    parameters {
+        booleanParam(name: "RELEASE", defaultValue: false)
+    }
+    
     stages {
-        stage('Build') {
+
+        stage("Build") {
             steps {
-                echo "this is build stage"
+                sh "./gradlew build"
             }
         }
-        stage('Test') {
+        
+        stage("Publish") {
+            when { expression { params.RELEASE } }
             steps {
-                echo "this is test stage"
+                sh "./gradlew release"
             }
         }
-        stage('Deploy') {
-            when { tag "release-*" }
-            steps {
-                echo 'Deploying only because this commit is tagged...'
-               
-            }
-        }
-    }
+    }
 }
