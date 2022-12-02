@@ -1,15 +1,12 @@
 pipeline {
     agent any
-
     stages {
-        stage('Deploy') {
+        stage("Test") {
             when {
-              expression {
-                currentBuild.result == null || currentBuild.result == 'SUCCESS' 
-              }
+                branch "release-*"
             }
             steps {
-                sh 'make publish'
+                echo "Hello World!"
             }
         }
     }
